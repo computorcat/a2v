@@ -99,3 +99,4 @@ call :A2V mp3 image.jpg 1920x1080
 exit /b
 
 :EOF
+goto :MENU
