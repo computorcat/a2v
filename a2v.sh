@@ -12,19 +12,20 @@ function a2v(){
     fi
     echo "Enter the video dimensions. If nothing is entered this will default to 1920x1080 (eg. 1920x1080):"
     read dimensions
+    # if dimensions is empty, set to 1920x1080
     if [ -z "$dimensions" ]; then
-        vw=$(echo $dimensions | cut -d'x' -f1)
-        vh=$(echo $dimensions | cut -d'x' -f2)
-    else
         vw=1920
         vh=1080
+    else
+        vw=$(echo $dimensions | cut -d'x' -f1)
+        vh=$(echo $dimensions | cut -d'x' -f2)
     fi
     # put in output folder
-    for i in *.$audio do 
-    # extract the album art from the audio file
-    ffmpeg -i "$i" -map 0:1 -c copy "$image"
-    ffmpeg -loop 1 -i $image -i "$i" -c:a copy -c:v libx264 -vf "scale=$vw:$vh:force_original_aspect_ratio=decrease,pad=$vw:$vh:(ow-iw)/2:(oh-ih)/2,setsar=1"  -shortest output/"${i%.*}.mp4"
-    done
+    echo $vw
+    echo $vh
+    pause 
+
+    for i in *.$audio; do ffmpeg -loop 1 -i $image -i "$i" -c:a copy -c:v libx264 -vf "scale=$vw:$vh:force_original_aspect_ratio=decrease,pad=$vw:$vh:(ow-iw)/2:(oh-ih)/2,setsar=1"  -shortest output/"${i%.*}.mp4"; done
 }
 
 function s2v(){
