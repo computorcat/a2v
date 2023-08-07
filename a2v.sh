@@ -1,42 +1,35 @@
 #!/bin/bash
 function a2v(){
     mkdir -p output
-    echo "Enter the audio data type (eg. "mp3", "wav", "ogg"):"
-    read audio 
-    echo "Enter the album art file name (eg. image.jpg):"
-    read image
+
+    read -rp "Enter the audio data type (e.g., mp3, wav, ogg): " audio
+    read -rp "Enter the album art file name (e.g., image.jpg): " image
+
     if [ ! -f "$image" ]; then
         echo "File not found!"
-        sleep .5
+        sleep 0.5
         a2v
     fi
-    echo "Enter the video dimensions. If nothing is entered this will default to 1920x1080 (eg. 1920x1080):"
-    read dimensions
+
+    read -rp "Enter the video dimensions (e.g., 1920x1080): " dimensions
+
     # if dimensions is empty, set to 1920x1080
     if [ -z "$dimensions" ]; then
         vw=1920
         vh=1080
     else
-        vw=$(echo $dimensions | cut -d'x' -f1)
-        vh=$(echo $dimensions | cut -d'x' -f2)
+        vw=$(echo "$dimensions" | cut -d'x' -f1)
+        vh=$(echo "$dimensions" | cut -d'x' -f2)
     fi
     # put in output folder
-    echo $vw
-    echo $vh
+    echo "$vw"
+    echo "$vh"
     pause 
 
-    for i in *.$audio; do ffmpeg -loop 1 -i $image -i "$i" -c:a copy -c:v libx264 -vf "scale=$vw:$vh:force_original_aspect_ratio=decrease,pad=$vw:$vh:(ow-iw)/2:(oh-ih)/2,setsar=1"  -shortest output/"${i%.*}.mp4"; done
+    for audio_file in *."$audio"; do
+        ffmpeg -loop 1 -i "$image" -i "$audio_file" -c:a copy -c:v libx264 -vf "scale=$vw:$vh:force_original_aspect_ratio=decrease,pad=$vw:$vh:(ow-iw)/2:(oh-ih)/2,setsar=1" -shortest "output/${audio_file%.*}.mp4"
+    done
 }
-
-function s2v(){
-    # input link
-    # y2dlp the audio, get the image via curl, then a2v
-    echo "Enter the link:"
-    read link
-    yt-dlp -x --audio-format mp3 --audio-quality 0 --embed-thumbnail --add-metadata --output "%(title)s.%(ext)s" $link
-    
-}
-
 
 while true; do
     clear
@@ -45,7 +38,7 @@ while true; do
     echo "2. idk what to call this but input a link and then it downloads and ummm ummm ummm"
     echo "3. Exit"
     echo "Enter your choice:"
-    read choice
+    read -r choice
 
     case $choice in
         1) a2v;;
