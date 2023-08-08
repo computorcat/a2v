@@ -50,9 +50,15 @@ def rfw():
     os.chdir(clean_title)
     cmd = ["yt-dlp", "-x", "--audio-format", "mp3", link]
     subprocess.run(cmd)
-    cmd = ["yt-dlp", "--get-thumbnail", link]
-    subprocess.run(cmd)
-    cmd = ["wget", "-O", "image.jpg", subprocess.run(cmd, capture_output=True).stdout.decode("utf-8")]
+    thumbnail_url = subprocess.check_output(["yt-dlp", "--get-thumbnail", link], text=True).strip()
+
+    response = requests.get(thumbnail_url)
+
+    if response.status_code == 200:
+        with open("image.jpg", "wb") as file:
+            file.write(response.content)
+    else:
+        print("Error downloading image with requests")
     a2v("mp3", "image.jpg", "1920x1080")
 
 def menu():
