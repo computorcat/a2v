@@ -5,6 +5,22 @@ import requests
 import subprocess
 import re
 import yt_dlp
+def menu():
+    print("Main Menu")
+    print("---------")
+    print("1. Audio to Video")
+    print("2. Rip from Web")
+    print("3. Exit")
+    choice = input("Enter your choice: ")
+    if choice == "1":
+        a2v(0,0,0)
+    elif choice == "2":
+        rfw()
+    elif choice == "3":
+        exit()
+    else:
+        print("Invalid choice. Please try again.")
+        menu()
 
 def a2v(audio=None, image=None, dimensions=None):
     if not all([audio, image, dimensions]):
@@ -13,7 +29,7 @@ def a2v(audio=None, image=None, dimensions=None):
         # search directory for image file
         if not os.path.isfile(image):
             print("File not found!")
-            a2v(0, 0, 0)
+            menu()
         dimensions = input("Enter the video dimensions (e.g., 1920x1080):")
     if not dimensions:
         vh = 1080
@@ -43,7 +59,7 @@ def rfw():
     title = yt_dlp.YoutubeDL().extract_info(link, download=False)['title']
     if not title:
         print("Error: Can't fetch title.")
-        rfw()
+        menu()
     clean_title = re.sub(r'[\/:*?"<>|]', '', title)
     os.makedirs(clean_title, exist_ok=True)
     os.chdir(clean_title)
@@ -59,24 +75,6 @@ def rfw():
     else:
         print("Error downloading image with requests")
     a2v("mp3", "image.jpg", "1920x1080")
-    
-
-def menu():
-    print("Main Menu")
-    print("---------")
-    print("1. Audio to Video")
-    print("2. Rip from Web")
-    print("3. Exit")
-    choice = input("Enter your choice: ")
-    if choice == "1":
-        a2v(0,0,0)
-    elif choice == "2":
-        rfw()
-    elif choice == "3":
-        exit()
-    else:
-        print("Invalid choice. Please try again.")
-        menu()
 
 
 menu()
