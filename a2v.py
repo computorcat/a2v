@@ -1,7 +1,6 @@
 
 import os
 import glob
-from bs4 import BeautifulSoup
 import requests
 import subprocess
 import re
@@ -60,6 +59,7 @@ def rfw():
     else:
         print("Error downloading image with requests")
     a2v("mp3", "image.jpg", "1920x1080")
+    
 
 def menu():
     print("Main Menu")
