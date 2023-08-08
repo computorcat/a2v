@@ -74,7 +74,7 @@ def rfw():
             file.write(response.content)
     else:
         print("Error downloading image with requests")
-    a2v("mp3", "image.jpg", "1920x1080")
+    a2v("mp3", "image.jpg", "1080x1920")
 
 
 menu()
