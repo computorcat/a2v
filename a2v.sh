@@ -28,8 +28,6 @@ function a2v(){
     # put in output folder
     echo "$vw"
     echo "$vh"
-    pause 
-
     for audio_file in *."$audio"; do
         ffmpeg -loop 1 -i "$image" -i "$audio_file" -c:a copy -c:v libx264 -pix_fmt yuv420p -vf "scale=$vw:$vh:force_original_aspect_ratio=decrease,pad=$vw:$vh:(ow-iw)/2:(oh-ih)/2,setsar=1" -shortest "output/${audio_file%.*}.mp4"
     done
