@@ -22,14 +22,15 @@ def menu():
         print("Invalid choice. Please try again.")
         menu()
 
+def selectImage():
+    return image
+
+
 def a2v(audio=None, image=None, dimensions=None):
     if not all([audio, image, dimensions]):
         audio = input("Enter the audio data type (e.g., mp3, wav, ogg):")
-        image = input("Enter the image file name (e.g. image.jpg):")
-        # search directory for image file
-        if not os.path.isfile(image):
-            print("File not found!")
-            menu()
+        image = input("Enter the image file name (e.g., image.jpg):")
+        
         dimensions = input("Enter the video dimensions (e.g., 1920x1080):")
     if not dimensions:
         vh = 1080
