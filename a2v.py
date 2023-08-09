@@ -13,7 +13,7 @@ def menu():
     print("3. Exit")
     choice = input("Enter your choice: ")
     if choice == "1":
-        a2v(0,0,0)
+        a2v()
     elif choice == "2":
         rfw()
     elif choice == "3":
