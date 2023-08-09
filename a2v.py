@@ -22,15 +22,20 @@ def menu():
         print("Invalid choice. Please try again.")
         menu()
 
-def selectImage():
+def selectImage(images):
+    print("Select an image:")
+    for i, image in enumerate(images):
+        print(f"{i}. {image}")
+    choice = input("Enter your choice: ")
+    image = images[int(choice)]
     return image
 
 
 def a2v(audio=None, image=None, dimensions=None):
     if not all([audio, image, dimensions]):
         audio = input("Enter the audio data type (e.g., mp3, wav, ogg):")
-        image = input("Enter the image file name (e.g., image.jpg):")
-        
+        images = glob.glob("*.jpg") + glob.glob("*.png") + glob.glob("*.jpeg")
+        image = selectImage(images)
         dimensions = input("Enter the video dimensions (e.g., 1920x1080):")
     if not dimensions:
         vh = 1080
@@ -44,6 +49,7 @@ def a2v(audio=None, image=None, dimensions=None):
         output_filename = os.path.join("output", os.path.splitext(audio_file)[0] + ".mp4")
         cmd = [
             "ffmpeg",
+            "-quiet",
             "-loop", "1", "-i", image,
             "-i", audio_file,
             "-c:a", "copy",
